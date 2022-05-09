@@ -1,12 +1,11 @@
-const EventEmitter = require('events');
-
-const customEmitter = new EventEmitter();
-
-customEmitter.on('response', (name, id) => {
-    console.log(`data received ${name} with id ${id}`);
+const { createReadStream } = require('fs');
+const stream = createReadStream('./content/big.txt');
+// default 64 KB per chunk
+// highWaterMark - control chunk size, count as byte
+// const sstream = fs.createWriteStream('./content/big.txt', { encoding: 'utf8', highWaterMark: 90000 });
+stream.on('data', (result) => {
+ console.log(result);
 });
-customEmitter.on('response', () => {
-    console.log(`some other logic here`);
+stream.on('error', (err) => {
+    console.log(err);
 });
-
-customEmitter.emit('response', 'john', 34); // .emit must be defined after .on function
