@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 const logger = require('./express-tutorials/04-logger');
 const authorize = require('./express-tutorials/authorize');
 
 // app.use('/api', logger); // use logger func for all url start with /api
-app.use([logger, authorize]); // use for all urls
+// app.use([logger, authorize]); // use for all urls
 
+app.use(morgan('tiny'));
 app.get('/', (req, res) => {
     res.send('Home Page');
 });
