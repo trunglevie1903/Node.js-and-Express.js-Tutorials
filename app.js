@@ -1,25 +1,36 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan');
-const logger = require('./express-tutorials/04-logger');
-const authorize = require('./express-tutorials/authorize');
+let { people } = require('./node-express-course/02-express-tutorial/data');
 
-// app.use('/api', logger); // use logger func for all url start with /api
-// app.use([logger, authorize]); // use for all urls
+// static assets
+app.use(express.static('./node-express-course/02-express-tutorial/methods-public'));
+// parse form data
+app.use(express.urlencoded({extended: false}));
+// parse json
+app.use(express.json());
 
-app.use(morgan('tiny'));
-app.get('/', (req, res) => {
-    res.send('Home Page');
+// GET method
+app.get('/api/people', (req, res) => {
+    res.status(200).json({ success: true, data: people});
 });
-app.get('/about',(req, res) => {
-    res.send('About');
+app.post('/api/people', (req, res) => {
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({success: false, msg: 'please provide a name'});
+    }
+    return res.status(201).send({success: true});
 });
-app.get('/api/products',(req, res) => {
-    res.send('Products');
+// POST method
+app.post('/login', (req, res) => {
+    // console.log(req.body);
+    const { name } = req.body;
+    if (name) {
+        return res.status(200). send(`Welcome ${name}`);
+    } else {
+        res.status(401).send('Please provide credentials ...');
+    }
 });
-app.get('/api/items',(req, res) => {
-    res.send('Items');
-});
+
 
 app.listen(5000, () => {
     console.log('listening on port 5000');
