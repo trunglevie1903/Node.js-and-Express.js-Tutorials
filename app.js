@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const logger = require('./express-tutorials/04-logger');
+const authorize = require('./express-tutorials/authorize');
 
-app.use('/api', logger); // use logger func for all url start with /api
-// app.use(logger); // use for all urls
+// app.use('/api', logger); // use logger func for all url start with /api
+app.use([logger, authorize]); // use for all urls
+
 app.get('/', (req, res) => {
     res.send('Home Page');
 });
